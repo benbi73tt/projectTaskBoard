@@ -1,13 +1,16 @@
 package ru.simbirsoft.projecttaskboard.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name="Users")
 public class Users {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
@@ -15,6 +18,15 @@ public class Users {
 
     @Column(name = "password")
     private String pass;
+
+
+    @OneToOne()
+    @JoinColumn(name = "executor_id")
+    private Task taskExecutor;
+
+    @OneToOne()
+    @JoinColumn(name = "author_id")
+    private Task taskAuthor;
 
 
     public String getName() {

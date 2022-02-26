@@ -12,8 +12,12 @@ import java.util.List;
 public class TaskBoard extends TaskManager<Task> {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @JoinColumn(name = "project")
+    @OneToOne
+    private Project project;
 
     @Value("Simbirsoft")
     @Column(name = "name")
@@ -49,4 +53,13 @@ public class TaskBoard extends TaskManager<Task> {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 }
+
