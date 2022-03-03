@@ -2,53 +2,58 @@ package ru.simbirsoft.projecttaskboard.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.simbirsoft.projecttaskboard.entity.Project;
-import ru.simbirsoft.projecttaskboard.entity.Task;
-import ru.simbirsoft.projecttaskboard.entity.TaskBoard;
-import ru.simbirsoft.projecttaskboard.entity.Users;
-import ru.simbirsoft.projecttaskboard.repository.ProjectRepository;
-import ru.simbirsoft.projecttaskboard.repository.TaskBoardRepository;
-import ru.simbirsoft.projecttaskboard.repository.TaskRepository;
-import ru.simbirsoft.projecttaskboard.repository.UsersRepository;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
+import ru.simbirsoft.projecttaskboard.entity.*;
+import ru.simbirsoft.projecttaskboard.exception.NotFoundTaskBoardIdException;
+import ru.simbirsoft.projecttaskboard.repository.*;
+import ru.simbirsoft.projecttaskboard.service.serviceInterface.TaskBoardService;
 
 
 @Service
 public class TaskBoardServiceImpl implements TaskBoardService {
 
     private final TaskBoardRepository taskBoardRepository;
-    private final TaskRepository taskRepository;
-    private final UsersRepository usersRepository;
     private final ProjectRepository projectRepository;
+    private final VersionRepository versionRepository;
+
 
     @Autowired
     public TaskBoardServiceImpl(ProjectRepository projectRepository,
                                 TaskBoardRepository taskBoardRepository,
-                                TaskRepository taskRepository,
-                                UsersRepository usersRepository) {
+                                VersionRepository versionRepository) {
         this.taskBoardRepository = taskBoardRepository;
-        this.taskRepository = taskRepository;
-        this.usersRepository = usersRepository;
         this.projectRepository = projectRepository;
+        this.versionRepository = versionRepository;
+    }
+
+    //todo Version
+    @Override
+    @Transactional
+    public Long createVersion(Version version) {
+        versionRepository.save(version);
+        return version.getId();
     }
 
     @Override
-    public TaskBoard getTaskBoard(Long id) {
-        return taskBoardRepository.findById(id).orElse(null);
+    public Version getVersion(Long id) {
+        return versionRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Users getUser(Long id) {
-        return usersRepository.findById(id).orElse(null);
+    public void deleteVersion(Long id) {
+        versionRepository.deleteById(id);
     }
 
     @Override
-    public Task getTask(Long id) {
-        return taskRepository.findById(id).orElse(null);
+    public void updateVersion(Long id, Version version) {
+        version.setId(id);
+        versionRepository.save(version);
     }
 
+
+    //todo PROJECT
     @Override
+    @Transactional
     public Long createProject(Project project) {
         projectRepository.save(project);
         return project.getId();
@@ -61,41 +66,46 @@ public class TaskBoardServiceImpl implements TaskBoardService {
     }
 
     @Override
+    public void updateProject(Project project) {
+        project.setId(1L);
+        projectRepository.save(project);
+    }
+
+    @Override
+    public void deleteProject(Long id) {
+        projectRepository.deleteById(id);
+    }
+
+
+    //todo TASK_BOARD
+    @Override
+    public TaskBoard getTaskBoard(Long id) {
+        return taskBoardRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional
     public Long createBoard(TaskBoard taskBoard) {
         taskBoard.setProject(getProject());
+        taskBoard.getProject().setTaskBoard(taskBoard);
         taskBoardRepository.save(taskBoard);
         return taskBoard.getId();
     }
 
-
     @Override
-    public Long addTask(Task task, Long id) {
-        task.setTaskBoard(getTaskBoard(id));
-        taskRepository.save(task);
-        return task.getId();
-    }
-
-
-    @Override
-    public List<Task> getTasks() {
-        return null;
+    public void updateTaskBoard(Long id, TaskBoard taskBoard) {
+        taskBoard.setId(id);
+        taskBoardRepository.save(taskBoard);
     }
 
     @Override
-    public Task findTask(Long task_id) {
-        return null;
+    public void deleteTaskBoard(Long id) {
+        taskBoardRepository.findById(id).orElseThrow(() -> new NotFoundTaskBoardIdException(id));
+
+        taskBoardRepository.deleteById(id);
     }
 
-    @Override
-    public Long createUser(Users user) {
-        usersRepository.save(user);
-        return user.getId();
-    }
 
-    @Override
-    public Users findUser(Long id) {
-        return usersRepository.findById(id).orElse(null);
-    }
 
 
 }

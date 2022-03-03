@@ -10,8 +10,7 @@ import ru.simbirsoft.projecttaskboard.entity.TaskBoard;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
-@Component("TaskComponent")
+@Component("TaskBoardComponent")
 public class TaskBoardDTO {
     private String name;
     private List<TaskDTO> tasks;
@@ -24,12 +23,14 @@ public class TaskBoardDTO {
                 .map(TaskDTO::from)
                 .collect(Collectors.toList());
 
+
         taskBoardDTO.setTasks(taskDTOList);
 
         return taskBoardDTO;
     }
 
     public TaskBoard toTaskBoard() {
+
         TaskBoard taskBoard = new TaskBoard(this.name);
         taskBoard.setName(this.name);
 
@@ -41,6 +42,21 @@ public class TaskBoardDTO {
             taskBoard.getTasks().addAll(tasks);
         }
         return taskBoard;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<TaskDTO> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskDTO> tasks) {
+        this.tasks = tasks;
     }
 }

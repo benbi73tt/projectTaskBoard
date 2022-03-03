@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +17,11 @@ public class TaskBoard extends TaskManager<Task> {
     private Long id;
 
     @JoinColumn(name = "project")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Project project;
 
     @Value("Simbirsoft")
+    @NotNull
     @Column(name = "name")
     private String name;
 

@@ -1,15 +1,14 @@
 package ru.simbirsoft.projecttaskboard.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="Users")
 public class Users {
 
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,6 +27,21 @@ public class Users {
     @JoinColumn(name = "author_id")
     private Task taskAuthor;
 
+    public Task getTaskExecutor() {
+        return taskExecutor;
+    }
+
+    public void setTaskExecutor(Task taskExecutor) {
+        this.taskExecutor = taskExecutor;
+    }
+
+    public Task getTaskAuthor() {
+        return taskAuthor;
+    }
+
+    public void setTaskAuthor(Task taskAuthor) {
+        this.taskAuthor = taskAuthor;
+    }
 
     public String getName() {
         return name;

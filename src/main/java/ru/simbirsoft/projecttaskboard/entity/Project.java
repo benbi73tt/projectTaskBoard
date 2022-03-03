@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "project")
-@Data
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +19,7 @@ public class Project {
     private boolean status;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private TaskBoard project;
+    private TaskBoard taskBoard;
 
 
     public Project(String name) {
@@ -39,5 +38,27 @@ public class Project {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public TaskBoard getTaskBoard() {
+        return taskBoard;
+    }
+
+    public void setTaskBoard(TaskBoard taskBoard) {
+        this.taskBoard = taskBoard;
+    }
 }

@@ -1,9 +1,8 @@
 package ru.simbirsoft.projecttaskboard.dto;
 
-import lombok.Data;
 import ru.simbirsoft.projecttaskboard.entity.Users;
 
-@Data
+
 public class UsersDTO {
     private String name;
 
@@ -17,5 +16,13 @@ public class UsersDTO {
         Users users = new Users();
         users.setName(this.name);
         return users;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
