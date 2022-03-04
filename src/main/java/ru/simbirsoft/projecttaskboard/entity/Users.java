@@ -27,16 +27,15 @@ public class Users {
     @JoinColumn(name = "author_id")
     private Task taskAuthor;
 
-    public Task getTaskExecutor() {
-        return taskExecutor;
+    @Override
+    public String toString() {
+        return "User { " +
+                " name " + name + '\'' +
+                '}';
     }
 
     public void setTaskExecutor(Task taskExecutor) {
         this.taskExecutor = taskExecutor;
-    }
-
-    public Task getTaskAuthor() {
-        return taskAuthor;
     }
 
     public void setTaskAuthor(Task taskAuthor) {
@@ -49,14 +48,6 @@ public class Users {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
     }
 
     public Long getId() {

@@ -31,9 +31,10 @@ public class UsersServiceImpl implements UsersService {
     public Users findUser(Long id) {
         return usersRepository.findById(id).orElse(new Users());
     }
+
     @Override
     public Users getUser(Long id) {
-        return usersRepository.findById(id).orElse(null);
+        return usersRepository.findById(id).orElseThrow(() -> new NotFoundUserIdException(id));
     }
 
     @Override

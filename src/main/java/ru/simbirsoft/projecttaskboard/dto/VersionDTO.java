@@ -1,6 +1,5 @@
 package ru.simbirsoft.projecttaskboard.dto;
 
-import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.simbirsoft.projecttaskboard.entity.Version;
 
@@ -27,16 +26,9 @@ public class VersionDTO {
         return version;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
     }
 
     public void setEndDate(LocalDate endDate) {

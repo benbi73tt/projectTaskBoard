@@ -1,6 +1,5 @@
 package ru.simbirsoft.projecttaskboard.dto;
 
-import lombok.Data;
 import org.springframework.stereotype.Component;
 import ru.simbirsoft.projecttaskboard.entity.Project;
 
@@ -36,16 +35,12 @@ public class ProjectDTO {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isStatus() {
-        return status;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
+
 }

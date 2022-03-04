@@ -1,11 +1,7 @@
 package ru.simbirsoft.projecttaskboard.entity;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 
 @Entity
@@ -24,15 +20,7 @@ public class Version {
 
     @OneToOne
     @JoinColumn(name = "version_id")
-    private Task version;
-
-    public Task getVersion() {
-        return version;
-    }
-
-    public void setVersion(Task version) {
-        this.version = version;
-    }
+    private Task taskVersion;
 
     public LocalDate getDateStart() {
         return dateStart;
@@ -49,8 +37,6 @@ public class Version {
     public void setDateEnd(LocalDate dateEnd) {
         this.dateEnd = dateEnd;
     }
-
-
 
     public Long getId() {
         return id;

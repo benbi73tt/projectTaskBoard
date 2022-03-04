@@ -16,10 +16,6 @@ public class TaskManager<T extends Task> {
         return tasks;
     }
 
-    public void setTasks(List<T> tasks) {
-        this.tasks = tasks;
-    }
-
     public int getSize() {
         return tasks.size();
     }

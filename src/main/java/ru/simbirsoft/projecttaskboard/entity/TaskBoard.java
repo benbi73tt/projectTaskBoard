@@ -17,7 +17,7 @@ public class TaskBoard extends TaskManager<Task> {
     private Long id;
 
     @JoinColumn(name = "project")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Project project;
 
     @Value("Simbirsoft")

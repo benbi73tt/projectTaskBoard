@@ -1,14 +1,9 @@
 package ru.simbirsoft.projecttaskboard.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import org.springframework.stereotype.Component;
 import ru.simbirsoft.projecttaskboard.entity.Status;
 import ru.simbirsoft.projecttaskboard.entity.Task;
-import ru.simbirsoft.projecttaskboard.entity.TaskBoard;
-import ru.simbirsoft.projecttaskboard.entity.Users;
 
-import java.util.List;
+
 
 public class TaskDTO {
     private String name;
@@ -40,6 +35,7 @@ public class TaskDTO {
     public Task toTask() {
         Task task = new Task();
         task.setName(this.name);
+        task.setStatus(this.status);
 
         if (this.author != null)
             task.setAuthor(this.author.toUsers());
@@ -61,24 +57,12 @@ public class TaskDTO {
         this.name = name;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
     public void setStatus(Status status) {
         this.status = status;
     }
 
-    public UsersDTO getAuthor() {
-        return author;
-    }
-
     public void setAuthor(UsersDTO author) {
         this.author = author;
-    }
-
-    public UsersDTO getExecutor() {
-        return executor;
     }
 
     public void setExecutor(UsersDTO executor) {

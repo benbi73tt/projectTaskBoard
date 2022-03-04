@@ -8,105 +8,90 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.simbirsoft.projecttaskboard.dto.*;
 import ru.simbirsoft.projecttaskboard.entity.*;
-import ru.simbirsoft.projecttaskboard.service.serviceInterface.TaskBoardService;
-import ru.simbirsoft.projecttaskboard.service.serviceInterface.TaskService;
-import ru.simbirsoft.projecttaskboard.service.serviceInterface.UsersService;
+import ru.simbirsoft.projecttaskboard.service.serviceInterface.*;
 
+import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/taskBoard")
+@RequestMapping("/project")
 public class BoardController {
 
     private final TaskBoardService taskBoardService;
     private final TaskService taskService;
     private final UsersService usersService;
+    private final ProjectService projectService;
+    private final VersionService versionService;
+    Logger logger = Logger.getGlobal();
 
     @Autowired
     public BoardController(TaskBoardService taskBoardService,
                            TaskService taskService,
-                           UsersService usersService) {
+                           UsersService usersService,
+                           ProjectService projectService,
+                           VersionService versionService) {
         this.taskBoardService = taskBoardService;
         this.taskService = taskService;
         this.usersService = usersService;
+        this.projectService = projectService;
+        this.versionService = versionService;
 
     }
 
-    @PostMapping("/version")
-    public Long createVersion(@RequestBody Version version) {
-        return taskBoardService.createVersion(version);
-    }
-
-    @GetMapping("/version/{id}")
-    public VersionDTO getVersion(@PathVariable Long id) {
-        return VersionDTO.from(taskBoardService.getVersion(id));
-    }
-
-    @PutMapping("/version/{id}")
-    public ResponseEntity updateVersion(@PathVariable Long id,
-                                        @RequestBody Version version) {
-        taskBoardService.updateVersion(id, version);
-        return ResponseEntity.ok().build();
-
-    }
-
-    @GetMapping("/project")
+    @GetMapping()
     public ProjectDTO getProject() {
-        return ProjectDTO.from(taskBoardService.getProject());
-    }
-
-    @PostMapping("/project")
-    public Long createProject(@RequestBody Project projectDTO) {
-        return taskBoardService.createProject(projectDTO);
-    }
-
-    @PutMapping("/project")
-    public ResponseEntity updateProject(@RequestBody Project project) {
-        taskBoardService.updateProject(project);
-        return ResponseEntity.ok().build();
-
-    }
-
-    @DeleteMapping("/project")
-    public ResponseEntity deleteProject() {
-        taskBoardService.deleteProject(1L);
-        return ResponseEntity.ok().build();
+        return ProjectDTO.from(projectService.getProject());
     }
 
     @PostMapping()
+    public Long createProject(@RequestBody Project projectDTO) {
+        return projectService.createProject(projectDTO);
+    }
+
+    @PutMapping()
+    public ResponseEntity updateProject(@RequestBody Project project) {
+        projectService.updateProject(project);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping()
+    public ResponseEntity deleteProject() {
+        projectService.deleteProject(1L);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/taskBoard")
     public Long createTaskBoard(@RequestBody TaskBoard taskBoard) {
+        taskBoard.setProject(projectService.getProject());
         return taskBoardService.createBoard(taskBoard);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/taskBoard/{id}")
     public TaskBoardDTO taskBoard(@PathVariable Long id) {
         return TaskBoardDTO.from(taskBoardService.getTaskBoard(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/taskBoard/{id}")
     public ResponseEntity updateTaskBoard(@PathVariable Long id,
                                           @RequestBody TaskBoard taskBoard) {
         taskBoardService.updateTaskBoard(id, taskBoard);
         return ResponseEntity.ok().build();
-
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/taskBoard/{id}")
     public ResponseEntity deleteTaskBoard(@PathVariable Long id) {
         taskBoardService.deleteTaskBoard(id);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{id}/task")
+    @PostMapping("taskBoard/{id}/task")
     public ResponseEntity addTask(@RequestBody TaskDTO taskDTO,
                                   @PathVariable(name = "id") Long id
     ) {
-        taskDTO.setAuthor(UsersDTO.from(usersService.getUser(taskDTO.getAuthor_id())));
-        taskDTO.setExecutor(UsersDTO.from(usersService.getUser(taskDTO.getExecutor_id())));
-
         Task task = taskDTO.toTask();
+        logger.info("Прикрепление задачи к доске задач с id: " + id);
         task.setTaskBoard(taskBoardService.getTaskBoard(id));
 
-        taskService.addTask(task, id, taskDTO.getAuthor_id(), taskDTO.getExecutor_id());
+        taskService.addTask(task, taskDTO.getAuthor_id(), taskDTO.getExecutor_id());
         return ResponseEntity.ok().build();
     }
 
@@ -120,7 +105,6 @@ public class BoardController {
                                      @RequestBody TaskDTO task) {
         taskService.updateTask(id, task.toTask(), task.getAuthor_id(), task.getExecutor_id());
         return ResponseEntity.ok().build();
-
     }
 
     @DeleteMapping("/task/{id}")
@@ -151,6 +135,23 @@ public class BoardController {
     @DeleteMapping("/user/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id) {
         usersService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/version")
+    public Long createVersion(@RequestBody Version version) {
+        return versionService.createVersion(version);
+    }
+
+    @GetMapping("/version/{id}")
+    public VersionDTO getVersion(@PathVariable Long id) {
+        return VersionDTO.from(versionService.getVersion(id));
+    }
+
+    @PutMapping("/version/{id}")
+    public ResponseEntity updateVersion(@PathVariable Long id,
+                                        @RequestBody Version version) {
+        versionService.updateVersion(id, version);
         return ResponseEntity.ok().build();
     }
 }

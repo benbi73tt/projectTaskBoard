@@ -1,7 +1,6 @@
 package ru.simbirsoft.projecttaskboard.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 
 import javax.persistence.*;
 
@@ -26,7 +25,7 @@ public class Task {
     private Users executor;
 
 
-    @JoinColumn(name="release_id")
+    @JoinColumn(name="version_id")
     @OneToOne(cascade = CascadeType.ALL)
     private Version version;
 
@@ -38,6 +37,15 @@ public class Task {
     @ManyToOne
     @JoinColumn(name="taskBoard_id")
     private TaskBoard taskBoard;
+
+    @Override
+    public String toString() {
+        return "Task {" +
+                " name " + name + '\'' +
+                " author " + author + '\'' +
+                " executor " + executor + '\'' +
+                '}';
+    }
 
     public String getName() {
         return name;
@@ -77,10 +85,6 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public TaskBoard getTaskBoard() {
-        return taskBoard;
     }
 
     public void setTaskBoard(TaskBoard taskBoard) {

@@ -1,6 +1,5 @@
 package ru.simbirsoft.projecttaskboard.entity;
 
-import lombok.Data;
 
 import javax.persistence.*;
 

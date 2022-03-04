@@ -1,6 +1,5 @@
 package ru.simbirsoft.projecttaskboard.dto;
 
-import lombok.Data;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import ru.simbirsoft.projecttaskboard.entity.Task;
@@ -50,10 +49,6 @@ public class TaskBoardDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<TaskDTO> getTasks() {
-        return tasks;
     }
 
     public void setTasks(List<TaskDTO> tasks) {
